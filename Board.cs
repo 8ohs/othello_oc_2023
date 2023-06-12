@@ -1,7 +1,8 @@
 using System;
+//盤のクラス
 
 public class Board {
-    int[,] board = new int[8,8];
+    private int[,] board = new int[8,8];
 
     public Board() {
 	this.initBoard();
@@ -30,6 +31,7 @@ public class Board {
     }
 
     public void setBoard(int[,] board) {
+	//盤面をセットする
 	for (int x = 0; x < 8; x++) {
 	    for (int y = 0; y < 8; y++) {
 		this.board[y,x] = board[y,x];
@@ -38,6 +40,7 @@ public class Board {
     }
 
     public int[,] getBoard() {
+	//盤面を返す
 	return this.board;
     }
     
