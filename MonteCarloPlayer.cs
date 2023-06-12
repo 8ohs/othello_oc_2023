@@ -1,4 +1,5 @@
 using System;
+//RandomPlayerを修正してから作る予定
 
 public class MonteCarloPlayer : OthelloAI, OthelloAIInterface {
     public MonteCarloPlayer(String name) : base(name) {} //コンストラクタ
