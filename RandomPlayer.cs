@@ -24,7 +24,7 @@ public class RandomPlayer : OthelloAI, OthelloAIInterface {
 	return ans;
     }
 
-    bool isStonePuttable(int[,] board, int x, int y, int player) {
+    private bool isStonePuttable(int[,] board, int x, int y, int player) {
 	if (x < 0 || x > 7 || y < 0 || y > 7) return false;
 	//すでに置かれている 
 	if (board[y,x] != 0) return false;

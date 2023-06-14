@@ -5,8 +5,7 @@ public class Human : OthelloAI, OthelloAIInterface {
 
     public Human() : base() {}
     
-    public Human(String name) : base(name) {
-    }
+    public Human(String name) : base(name) {}
     
     public int[] action(int[,] board, int player) {
 	Console.Write("x y :  ");

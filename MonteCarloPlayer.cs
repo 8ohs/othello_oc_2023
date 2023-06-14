@@ -4,7 +4,7 @@ public class MonteCarloPlayer : OthelloAI, OthelloAIInterface {
     public MonteCarloPlayer(String name) : base(name) {} //コンストラクタ
     public MonteCarloPlayer() : base() {}
 
-    private const int MAX_TRY_NUM = 1000;
+    private const int MAX_TRY_NUM = 10000;
 
     public int[] action(int[,] board, int player) {
 	Board b = new Board();
@@ -15,15 +15,6 @@ public class MonteCarloPlayer : OthelloAI, OthelloAIInterface {
 	b.setBoard(board);
 	int[,] gouhoute = b.getGouhoute(player);
 	
-	/*
-	gouhoute[0,0] 0個目のx座標
-	gouhoute[0,1] 0個目のy座標
-
-	gouhoute[1,0] 1個目のX座標
-	gouhoute[1,1] 1個目のy座標
-	*/
-
-	int len = gouhoute.GetLength(0);
 	int[] tryNum = new int[len];
 	int[] loseNum = new int[len];
 	int ansIndex = 0;
@@ -37,6 +28,7 @@ public class MonteCarloPlayer : OthelloAI, OthelloAIInterface {
 
 	
 	for (int i = 0; i < len; i++) {
+	    if (tryNum[i] == 0) continue;
 	    if ((double)(loseNum[i]) / (double)(tryNum[i]) > maxLoseRate) {
 		maxLoseRate = (double)(loseNum[i]) / (double)(tryNum[i]);
 		ansIndex = i;
@@ -50,6 +42,7 @@ public class MonteCarloPlayer : OthelloAI, OthelloAIInterface {
     }
 
     static int battleResult(Board board, int x, int y, OthelloAIInterface p1, OthelloAIInterface p2, int player) {
+	//負けたら1かったら0を返す
 	Board b = new Board();
 	b.setBoard(board.getBoard());
 	b.putStone(x,y,player);
