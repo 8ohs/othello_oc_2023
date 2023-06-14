@@ -4,7 +4,7 @@ public class MonteCarloPlayer : OthelloAI, OthelloAIInterface {
     public MonteCarloPlayer(String name) : base(name) {} //コンストラクタ
     public MonteCarloPlayer() : base() {}
 
-    private const int MAX_TRY_NUM = 10000;
+    private const int MAX_TRY_NUM = 1000;
 
     public int[] action(int[,] board, int player) {
 	Board b = new Board();
@@ -22,6 +22,7 @@ public class MonteCarloPlayer : OthelloAI, OthelloAIInterface {
 	double maxLoseRate = 0;
 
 	for (int i = 0; i < MAX_TRY_NUM; i++) {
+	    //Console.Write("\r({0}/{1})\r", i, MAX_TRY_NUM); //プレイアウトの状況を表示
 	    int index = rand.Next(0,len);
 	    tryNum[index]++;
 	    loseNum[index] += battleResult(b, gouhoute[index,0], gouhoute[index,1], p1, p2, player);
