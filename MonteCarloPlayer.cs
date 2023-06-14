@@ -14,6 +14,7 @@ public class MonteCarloPlayer : OthelloAI, OthelloAIInterface {
 
 	b.setBoard(board);
 	int[,] gouhoute = b.getGouhoute(player);
+	int len = gouhoute.GetLength(0);
 	
 	int[] tryNum = new int[len];
 	int[] loseNum = new int[len];
