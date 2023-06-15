@@ -10,9 +10,9 @@ public class OthelloMain {
 	//Console.WriteLine("ボード(初期盤面)");
 	//board.showBoard();
 
-	Human h_p1 = new Human("最弱オセロ");
+	//Human h_p1 = new Human("最弱オセロ");
 	//Human h_p2 = new Human();
-	//RandomPlayer r_p1 = new RandomPlayer("ランダムくん");
+	RandomPlayer r_p1 = new RandomPlayer("ランダムくん");
 	//RandomPlayer r_p2 = new RandomPlayer("ランダム2");
 	MonteCarloPlayer m_p1 = new MonteCarloPlayer("もんちゃん");
 	//MonteCarloPlayer m_p2 = new MonteCarloPlayer("もんちゃん2");
@@ -20,7 +20,7 @@ public class OthelloMain {
 	//MinPlayer min_p2 = new MinPlayer("Min君2");
 	//IshizukaAI i_p = new IshizukaAI("まなるん");
 
-	battle(board, m_p1, h_p1, 1, 0);
+	battle(board, m_p1, r_p1, 10, 0);
 	//battle(board, min_p2, min_p1, 1000, 2);
     }
 
@@ -57,7 +57,7 @@ public class OthelloMain {
 		    int[] te = p1.action(board.getBoard(), 1);
 		    if (mode == 0) Console.WriteLine("(x,y)=({0},{1})",te[0],te[1]);
 		    if ((board.putStone(te[0], te[1], 1)) == -1) lose(p1);
-		} else skip(p1);
+		} else if (mode == 0) skip(p1);
 
 		if (mode == 0) {
 		    board.showBoard();
@@ -70,7 +70,7 @@ public class OthelloMain {
 		    int[] te = p2.action(board.getBoard(), -1);
 		    if (mode == 0) Console.WriteLine("(x,y)=({0},{1})",te[0],te[1]);
 		    if (board.putStone(te[0], te[1], -1) == -1) lose(p2);
-		} else skip(p2);
+		} else if (mode == 0) skip(p2);
 
 		if (mode == 0) {
 		    board.showBoard();
