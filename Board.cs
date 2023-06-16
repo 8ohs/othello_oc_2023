@@ -40,8 +40,14 @@ public class Board {
     }
 
     public int[,] getBoard() {
-	//盤面を返す
-	return this.board;
+	//盤面のコピーを返す
+	int[,] copyBoard = new int[8,8];
+	for (int x = 0; x < 8; x++) {
+	    for (int y = 0; y < 8; y++) {
+		copyBoard[y,x] = this.board[y,x];
+	    }
+	}
+	return copyBoard;
     }
     
     public void showResult() {
