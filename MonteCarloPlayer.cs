@@ -25,7 +25,7 @@ public class MonteCarloPlayer : OthelloAI, OthelloAIInterface {
 	double maxLoseRate = 0;
 
 	for (int i = 0; i < this.maxTryNum; i++) {
-	    Console.Write("({0}/{1})\r", i, maxTryNum); //プレイアウトの状況を表示
+	    //Console.Write("({0}/{1})\r", i, maxTryNum); //プレイアウトの状況を表示
 	    int index = rand.Next(0,len);
 	    tryNum[index]++;
 	    loseNum[index] += battleResult(b, gouhoute[index,0], gouhoute[index,1], p1, p2, player);
