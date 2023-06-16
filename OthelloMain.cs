@@ -14,13 +14,15 @@ public class OthelloMain {
 	//Human h_p2 = new Human();
 	RandomPlayer r_p1 = new RandomPlayer("ランダムくん");
 	//RandomPlayer r_p2 = new RandomPlayer("ランダム2");
-	MonteCarloPlayer m_p1 = new MonteCarloPlayer("もんちゃん");
+	//MonteCarloPlayer m_p1 = new MonteCarloPlayer("もんちゃん100", 100);
+	//MonteCarloPlayer m_p2 = new MonteCarloPlayer("もんちゃん50", 50);
 	//MonteCarloPlayer m_p2 = new MonteCarloPlayer("もんちゃん2");
 	//MinPlayer min_p1 = new MinPlayer("Min君1");
 	//MinPlayer min_p2 = new MinPlayer("Min君2");
-	//IshizukaAI i_p = new IshizukaAI("まなるん");
+	//IshizukaAI i_p1 = new IshizukaAI("石塚AI");
+	CustomMon cm_p1 = new CustomMon("石塚AI");
 
-	battle(board, m_p1, r_p1, 10, 0);
+	battle(board, cm_p1, r_p1, 1, 0);
 	//battle(board, min_p2, min_p1, 1000, 2);
     }
 
@@ -61,6 +63,7 @@ public class OthelloMain {
 
 		if (mode == 0) {
 		    board.showBoard();
+		    //board.showBoardPuttable(-1);//-1が置ける場所を@で表示
 		    Console.Write("\r\n\r\n ================= \r\n\r\n");
 		    Console.Write("後攻({0})",p2.getName());
 		    Console.WriteLine(" : ●");
