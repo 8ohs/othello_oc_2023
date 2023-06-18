@@ -1,3 +1,4 @@
+[![dotnet package](https://github.com/8ohs/othello_oc_2023/actions/workflows/dotnet-package.yml/badge.svg)](https://github.com/8ohs/othello_oc_2023/actions/workflows/dotnet-package.yml)
 - `OthelloMain.cs`
   - Mainメソッド  
 - `OthelloAIInterface.cs`
