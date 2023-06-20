@@ -8,6 +8,115 @@ public class Board {
 	this.initBoard();
     }
 
+    public void battle(OthelloAIInterface p1, OthelloAIInterface p2, int n, int mode) {
+	/*
+	  n
+	  試合回数
+	  
+	  mode
+	  0 毎回盤面出力
+	  1 最終結果のみ出力
+	  2 盤面出力なし
+	 */
+	int win_1p = 0;
+	int win_2p = 0;
+	int draw = 0;
+	
+	for (int i = 0; i < n; i++) {
+	    this.initBoard();
+
+	    if (mode == 0) { //初期盤面
+		this.showBoard();
+		//board.showBoardPuttable(1);//1が置ける場所を@で表示
+		Console.Write("\r\n\r\n ================= \r\n\r\n");
+	    }
+	    
+	    do {
+		if (mode == 0) {
+		    Console.Write("先行({0})",p1.getName());
+		    Console.WriteLine(" : ○");
+		}
+	    
+		if (this.numOfPuttable(1) != 0) {
+		    int[] te = p1.action(this.getBoard(), 1);
+		    if (mode == 0) Console.WriteLine("(x,y)=({0},{1})",te[0],te[1]);
+		    if ((this.putStone(te[0], te[1], 1)) == -1) this.lose(p1);
+		} else if (mode == 0) this.skip(p1);
+
+		if (mode == 0) {
+		    this.showBoard();
+		    //board.showBoardPuttable(-1);//-1が置ける場所を@で表示
+		    Console.Write("\r\n\r\n ================= \r\n\r\n");
+		    Console.Write("後攻({0})",p2.getName());
+		    Console.WriteLine(" : ●");
+		}
+	    
+		if (this.numOfPuttable(-1) != 0) {
+		    int[] te = p2.action(this.getBoard(), -1);
+		    if (mode == 0) Console.WriteLine("(x,y)=({0},{1})",te[0],te[1]);
+		    if (this.putStone(te[0], te[1], -1) == -1) this.lose(p2);
+		} else if (mode == 0) this.skip(p2);
+
+		if (mode == 0) {
+		    this.showBoard();
+		    //board.showBoardPuttable(1);//1が置ける場所を@で表示
+		    Console.Write("\r\n\r\n ================= \r\n\r\n");
+		}
+	    
+	    } while (this.numOfPuttable(1) + this.numOfPuttable(-1) != 0);
+	
+	    if (mode <= 1) this.showResult();
+	
+	    if (this.numOfStone(1) > this.numOfStone(-1)) {
+		win_1p++;
+	    } else if (this.numOfStone(1) < this.numOfStone(-1)){
+		win_2p++;
+	    } else {
+		draw++;
+	    }
+	}
+	Console.WriteLine("先行({3}):{0} 後攻({4}):{1} draw:{2}", win_1p, win_2p, draw, p1.getName(), p2.getName());
+    }
+
+    private void lose(OthelloAIInterface p) {
+	Console.WriteLine("{0}が、おけないマスに置こうとしました。", p.getName());
+	Console.WriteLine("よって{0}の反則負けです", p.getName());
+	Environment.Exit(0);
+    }
+
+    private void skip(OthelloAIInterface p) {
+	Console.WriteLine("{0}はおけるマスがありません。", p.getName());
+    }
+
+    public int battleRandom(int x, int y, int player) {
+	/*
+	  (x,y)にplayerの石を置いてランダムに戦った結果
+	  playerが負けたら1、勝ったら0を返す
+	*/
+	Board b = new Board();
+	b.setBoard(this.board);
+	
+	this.putStone(x,y,player);
+	RandomPlayer p1 = new RandomPlayer();
+	RandomPlayer p2 = new RandomPlayer();
+	
+	do {
+	    if (b.numOfPuttable(player*-1) != 0) {
+		int[] te = p1.action(b.getBoard(), player*-1);
+		b.putStone(te[0], te[1], player*-1);
+	    }
+	    
+	    if (b.numOfPuttable(player) != 0) {
+		int[] te = p2.action(b.getBoard(), player);
+		b.putStone(te[0], te[1], player);
+	    }
+	    
+	} while (b.numOfPuttable(1) + b.numOfPuttable(-1) != 0);
+	
+	if (b.numOfStone(player) < b.numOfStone(player*-1)) return 1;
+	else return 0;
+    }
+
     public int[,] getGouhoute(int player) {
 	//合法手の配列を返す
 	int[,] gouhoute = new int[60,2];
