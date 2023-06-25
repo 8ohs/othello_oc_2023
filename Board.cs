@@ -8,6 +8,10 @@ public class Board {
 	this.initBoard();
     }
 
+    public Board(int[,] board) {
+	this.setBoard(board);
+    }
+
     public void battle(OthelloAIInterface p1, OthelloAIInterface p2, int n, int mode) {
 	/*
 	  n
@@ -75,7 +79,7 @@ public class Board {
 		draw++;
 	    }
 	}
-	Console.WriteLine("先行({3}):{0} 後攻({4}):{1} draw:{2}", win_1p, win_2p, draw, p1.getName(), p2.getName());
+	Console.WriteLine("先行○({3}):{0} 後攻●({4}):{1} draw:{2}", win_1p, win_2p, draw, p1.getName(), p2.getName());
     }
 
     private void lose(OthelloAIInterface p) {
@@ -88,17 +92,16 @@ public class Board {
 	Console.WriteLine("{0}はおけるマスがありません。", p.getName());
     }
 
-    public int battleRandom(int x, int y, int player) {
+    public int battleRandom(int[,] board, int x, int y, int player) {
 	/*
 	  (x,y)にplayerの石を置いてランダムに戦った結果
 	  playerが負けたら1、勝ったら0を返す
 	*/
-	Board b = new Board();
-	b.setBoard(this.board);
+	Board b = new Board(board);
 	
-	this.putStone(x,y,player);
-	RandomPlayer p1 = new RandomPlayer();
-	RandomPlayer p2 = new RandomPlayer();
+	b.putStone(x,y,player);
+	RPForMonteCarlo p1 = new RPForMonteCarlo();
+	RPForMonteCarlo p2 = new RPForMonteCarlo();
 	
 	do {
 	    if (b.numOfPuttable(player*-1) != 0) {
@@ -109,14 +112,45 @@ public class Board {
 	    if (b.numOfPuttable(player) != 0) {
 		int[] te = p2.action(b.getBoard(), player);
 		b.putStone(te[0], te[1], player);
-	    }
-	    
+	    }    
 	} while (b.numOfPuttable(1) + b.numOfPuttable(-1) != 0);
 	
 	if (b.numOfStone(player) < b.numOfStone(player*-1)) return 1;
 	else return 0;
     }
 
+    public bool isLose(int player) {
+	return (this.numOfStone(player) < this.numOfStone(player*-1));
+    }
+
+
+    public int battleRandom(int x, int y, int player, int w) {
+	/*
+	  (x,y)にplayerの石を置いてランダムに戦った結果
+	  playerが負けたらw、勝ったら0を返す
+	*/
+	Board b = new Board(this.board);
+	
+	b.putStone(x,y,player);
+	RPForMonteCarlo p1 = new RPForMonteCarlo();
+	RPForMonteCarlo p2 = new RPForMonteCarlo();
+	
+	do {
+	    if (b.numOfPuttable(player*-1) != 0) {
+		int[] te = p1.action(b.getBoard(), player*-1);
+		b.putStone(te[0], te[1], player*-1);
+	    }
+	    
+	    if (b.numOfPuttable(player) != 0) {
+		int[] te = p2.action(b.getBoard(), player);
+		b.putStone(te[0], te[1], player);
+	    }    
+	} while (b.numOfPuttable(1) + b.numOfPuttable(-1) != 0);
+	
+	if (b.numOfStone(player) < b.numOfStone(player*-1)) return w;
+	else return 0;
+    }
+    
     public int[,] getGouhoute(int player) {
 	//合法手の配列を返す
 	int[,] gouhoute = new int[60,2];
@@ -135,7 +169,6 @@ public class Board {
 	    ans[i,0] = gouhoute[i,0];
 	    ans[i,1] = gouhoute[i,1];
 	}
-
 	return ans;
     }
 
@@ -167,6 +200,27 @@ public class Board {
 	Console.WriteLine("○:{0}   ●:{1}", this.numOfStone(1), this.numOfStone(-1));
     }
 
+    public int numOfPuttable(int player) {
+	int count = 0;
+	for (int x = 0; x < 8; x++) {
+	    for (int y = 0; y < 8; y++) {
+		if (this.isStonePuttable(x, y, player)) count++;
+	    }
+	}
+	return count;
+    }
+    
+    public int numOfPuttable() {
+	int count = 0;
+	for (int x = 0; x < 8; x++) {
+	    for (int y = 0; y < 8; y++) {
+		if (this.isStonePuttable(x, y, -1)) count++;
+		if (this.isStonePuttable(x, y, 1)) count++;
+	    }
+	}
+	return count;
+    }
+    
     public int numOfStone(int player) {
 	//現在の盤面のplayerの石の数を返す
 	int count = 0;
@@ -178,19 +232,17 @@ public class Board {
 	return count;
     }
 
-    public int numOfPuttable(int player) {
-	//playerがおける石の数を返す
+    public int numOfStone() {
+	//現在の盤面のplayerの石の数を返す
 	int count = 0;
 	for (int x = 0; x < 8; x++) {
 	    for (int y = 0; y < 8; y++) {
-		if (isStonePuttable(x, y, player)) {
-		    count++;
-		}
+		if (this.board[y,x] != 0) count++;
 	    }
 	}
 	return count;
     }
-
+    
     public void showBoardPuttable(int player) {
 	//boardでplayerがおける場所をプリント
 	int[,] board_2 = new int[8,8];
