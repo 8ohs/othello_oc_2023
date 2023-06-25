@@ -20,4 +20,4 @@
 - `MonteCarloPlayer3.cs`
   - ボロ負けし易い手を選びやすくて,角を選びにくくて,最後は読み切る原始的モンテカルロ
 - `NegaMaxPlayer.cs`
-  `簡易NegaMaxのつもり`
+  - 簡易NegaMaxのつもり
