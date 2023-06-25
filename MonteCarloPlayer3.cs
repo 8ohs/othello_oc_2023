@@ -18,7 +18,8 @@ public class MonteCarloPlayer3 : OthelloAI, OthelloAIInterface {
     private int maxTryNum = 1000; //プレイアウト数
     private int weight = 10;
     private int myPlayer = 0;
-    private const int DEPTH = 14;
+    private const int DEPTH = 14;//読み切る深さ
+    private const int KADO = 5;//角のとりにくさ
 
     public int[] action(int[,] board, int player) {
 	Board b = new Board(board);
@@ -30,10 +31,7 @@ public class MonteCarloPlayer3 : OthelloAI, OthelloAIInterface {
 	    for (int i = 0; i < len; i++) {
 		Board b2 = new Board(board);
 		b2.putStone(gouhoute[i,0], gouhoute[i,1], player);
-		if (isLose(b2, -1*player)) {
-		    Console.WriteLine("=============負け確定===========");
-		    return new int[] {gouhoute[i,0], gouhoute[i,1]};
-		} else Console.WriteLine("=============まだわんちゃん...===========");
+		if (isLose(b2, -1*player)) return new int[] {gouhoute[i,0], gouhoute[i,1]};
 	    }
 	}
 	
@@ -48,7 +46,7 @@ public class MonteCarloPlayer3 : OthelloAI, OthelloAIInterface {
 	    int index = rand.Next(0,len);
 	    tryNum[index]++;
 	    loseNum[index] += b.battleRandom(gouhoute[index,0], gouhoute[index,1], player, this.weight);
-	    if (gouhoute[index,0] % 7 == 0 & gouhoute[index,1] % 7 == 0) loseNum[index] -= 5;//角はちょっと選びにくく
+	    if (gouhoute[index,0] % 7 == 0 & gouhoute[index,1] % 7 == 0) loseNum[index] -= KADO;//角はちょっと選びにくく
 	}
 
 	// Parallel.For(0, this.maxTryNum, i => {
@@ -58,7 +56,7 @@ public class MonteCarloPlayer3 : OthelloAI, OthelloAIInterface {
 	// });
 
 	
-	for (int i = 0; i < len; i++) {
+	for (int i = 0; i < len; i++) {//負け率が高いやつを探す
 	    if (tryNum[i] == 0) continue;
 	    if ((double)(loseNum[i]) / (double)(tryNum[i]) > maxLoseRate) {
 		maxLoseRate = (double)(loseNum[i]) / (double)(tryNum[i]);
@@ -69,8 +67,9 @@ public class MonteCarloPlayer3 : OthelloAI, OthelloAIInterface {
     }
 
     private bool isLose(Board b, int player) {
-	if (b.numOfPuttable() == 0) return b.isLose(this.myPlayer);
-	if (b.numOfPuttable(player) == 0) return isLose(b, player*-1);
+	//負け確定ならtrueを返す
+	if (b.numOfPuttable() == 0) return b.isLose(this.myPlayer);//葉で勝敗判定
+	if (b.numOfPuttable(player) == 0) return isLose(b, player*-1);//スキップ判定
 	int[,] gouhoute = b.getGouhoute(player);
 	int len = gouhoute.GetLength(0);
 	
