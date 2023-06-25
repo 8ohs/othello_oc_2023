@@ -10,13 +10,13 @@ public class MonteCarloPlayer3 : OthelloAI, OthelloAIInterface {
     }
     public MonteCarloPlayer3(String name, int n, int w) : base(name) {
 	this.maxTryNum = n;
-	this.weight = w;
+	this.BOROMAKE = w;
     }    
     public MonteCarloPlayer3(String name) : base(name) {}
     public MonteCarloPlayer3() : base() {}
 
     private int maxTryNum = 1000; //プレイアウト数
-    private int weight = 10;
+    private int BOROMAKE = 10;//ボロ負けする手の選びやすさ
     private int myPlayer = 0;
     private const int DEPTH = 14;//読み切る深さ
     private const int KADO = 5;//角のとりにくさ
@@ -45,7 +45,7 @@ public class MonteCarloPlayer3 : OthelloAI, OthelloAIInterface {
 	    //Console.Write("({0}/{1})\r", i, maxTryNum); //プレイアウトの状況を表示
 	    int index = rand.Next(0,len);
 	    tryNum[index]++;
-	    loseNum[index] += b.battleRandom(gouhoute[index,0], gouhoute[index,1], player, this.weight);
+	    loseNum[index] += b.battleRandom(gouhoute[index,0], gouhoute[index,1], player, this.BOROMAKE);
 	    if (gouhoute[index,0] % 7 == 0 & gouhoute[index,1] % 7 == 0) loseNum[index] -= KADO;//角はちょっと選びにくく
 	}
 
