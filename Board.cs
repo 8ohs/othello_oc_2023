@@ -146,8 +146,9 @@ public class Board {
 		b.putStone(te[0], te[1], player);
 	    }    
 	} while (b.numOfPuttable(1) + b.numOfPuttable(-1) != 0);
-	
-	if (b.numOfStone(player) < b.numOfStone(player*-1)) return w;
+
+	if (b.numOfStone(player) == 0) return w;
+	if (b.numOfStone(player) < b.numOfStone(player*-1)) return 1;
 	else return 0;
     }
     
